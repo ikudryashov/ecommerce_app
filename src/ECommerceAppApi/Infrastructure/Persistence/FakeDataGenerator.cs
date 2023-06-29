@@ -30,10 +30,10 @@ public class FakeDataGenerator : IFakeDataGenerator
 			.RuleFor(x => x.Description, f => f.Lorem.Sentences(1))
 			.RuleFor(x => x.Price, f => f.Random.Decimal(1, 1000))
 			.RuleFor(x => x.Color, f => f.PickRandom(colors))
-			.FinishWith((f, u) =>
+			.FinishWith((f, x) =>
 			{
-				var category = testCategories.FirstOrDefault(c => c.Id == u.CategoryId);
-				category!.Products!.Add(u);
+				var category = testCategories.FirstOrDefault(c => c.Id == x.CategoryId);
+				category!.Products!.Add(x);
 			})
 			.Generate(10000);
 

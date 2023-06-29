@@ -19,17 +19,9 @@ public class ListProductsInCategoryQueryHandler : IRequestHandler<ListProductsIn
 	
 	public async Task<PagedList<ProductResult>> Handle(ListProductsInCategoryQuery request, CancellationToken cancellationToken)
 	{
-		if (string.IsNullOrWhiteSpace(request.CategoryName))
-		{
-			throw new ApiException(
-				"https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1",
-				"Bad request",
-				"No category name provided",
-				HttpStatusCode.BadRequest);
-		}
-		
 		var category = await _context.Categories
-			.SingleOrDefaultAsync(c => c.Name == request.CategoryName, cancellationToken);
+			.SingleOrDefaultAsync(c => 
+				c.Name.ToLower() == request.CategoryName!.ToLower(), cancellationToken);
 		
 		if (category is null)
 		{
@@ -58,28 +50,10 @@ public class ListProductsInCategoryQueryHandler : IRequestHandler<ListProductsIn
 			_ => product => product.Id
 		};
 
-		if (request.SortOrder?.ToLower() == "desc")
-		{
-			productsQuery = productsQuery.OrderByDescending(keySelector);
-		}
-		else
-		{
-			productsQuery = productsQuery.OrderBy(keySelector);
-		}
-
-		//arbitrary default values in case provided pagination values are invalid
-		int page = 1;
-		int pageSize = 10;
-		
-		if (request.Page is not null && request.Page >= 1)
-		{
-			page = (int)request.Page;
-		}
-
-		if (request.PageSize is not null && request.PageSize >= 1)
-		{
-			pageSize = (int)request.PageSize;
-		}
+		productsQuery = 
+			request.SortOrder?.ToLower() == "desc" ? 
+			productsQuery.OrderByDescending(keySelector) : 
+			productsQuery.OrderBy(keySelector);
 
 		var productResultsQuery = productsQuery
 			.Select(p => new ProductResult(
@@ -92,7 +66,7 @@ public class ListProductsInCategoryQueryHandler : IRequestHandler<ListProductsIn
 			p.Color));
 
 		var products = await PagedList<ProductResult>
-			.CreateAsync(productResultsQuery, page, pageSize);
+			.CreateAsync(productResultsQuery, request.Page, request.PageSize);
 
 		return products;
 	}

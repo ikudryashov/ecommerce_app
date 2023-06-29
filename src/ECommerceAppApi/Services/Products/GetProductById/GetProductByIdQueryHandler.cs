@@ -17,7 +17,11 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, P
 
 	public async Task<ProductResult> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
 	{
-		var product = await _context.Products.SingleOrDefaultAsync(p => p.Id == request.Id);
+		var product = await _context.Products
+			.SingleOrDefaultAsync(p => 
+					p.Id == request.Id, 
+					cancellationToken: cancellationToken);
+		
 		if (product is null)
 		{
 			throw new ApiException(

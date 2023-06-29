@@ -36,17 +36,17 @@ app.MapGet("/api/categories/{name}",
 		return result;
 	});
 
-app.MapGet("api/products",
+app.MapGet("api/{category}/products",
 	async (
 		IMediator mediator,
-		string? categoryName,
+		string category,
 		string? searchTerm,
 		string? sortColumn,
 		string? sortOrder,
 		int? page,
 		int? pageSize) => await mediator
 		.Send(new ListProductsInCategoryQuery(
-			categoryName,
+			category,
 			searchTerm, 
 			sortColumn, 
 			sortOrder, 
