@@ -7,4 +7,5 @@ public record ProductResult(
 	string CategoryName,
 	string Description,
 	decimal Price,
-	string Color);
+	string Color,
+	int Quantity);

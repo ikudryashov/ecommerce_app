@@ -43,13 +43,15 @@ app.MapGet("api/{category}/products",
 		string? searchTerm,
 		string? sortColumn,
 		string? sortOrder,
+		bool? onlyInStock,
 		int? page,
 		int? pageSize) => await mediator
 		.Send(new ListProductsInCategoryQuery(
 			category,
 			searchTerm, 
 			sortColumn, 
-			sortOrder, 
+			sortOrder,
+			onlyInStock,
 			page,
 			pageSize)));
 

@@ -40,6 +40,7 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, P
 			category.Name,
 			product.Description,
 			product.Price,
-			product.Color);
+			product.Color,
+			product.Quantity);
 	}
 }

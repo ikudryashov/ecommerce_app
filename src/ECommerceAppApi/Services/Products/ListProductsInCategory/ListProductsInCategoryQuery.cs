@@ -7,5 +7,6 @@ public record ListProductsInCategoryQuery(
 	string? SearchTerm,
 	string? SortColumn,
 	string? SortOrder,
+	bool? OnlyInStock,
 	int? Page,
 	int? PageSize) : IRequest<PagedList<ProductResult>>;

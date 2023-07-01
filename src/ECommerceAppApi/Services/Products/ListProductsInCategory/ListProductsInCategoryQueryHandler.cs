@@ -55,6 +55,14 @@ public class ListProductsInCategoryQueryHandler : IRequestHandler<ListProductsIn
 			productsQuery.OrderByDescending(keySelector) : 
 			productsQuery.OrderBy(keySelector);
 
+
+		if (request.OnlyInStock is not null && (bool)request.OnlyInStock)
+		{
+			productsQuery = productsQuery.Where(p => p.Quantity > 0);
+		}
+		
+		productsQuery = productsQuery.Where(p => p.Quantity >= 0);
+
 		var productResultsQuery = productsQuery
 			.Select(p => new ProductResult(
 			p.Id,
@@ -63,7 +71,8 @@ public class ListProductsInCategoryQueryHandler : IRequestHandler<ListProductsIn
 			category.Name,
 			p.Description,
 			p.Price,
-			p.Color));
+			p.Color,
+			p.Quantity));
 
 		var products = await PagedList<ProductResult>
 			.CreateAsync(productResultsQuery, request.Page, request.PageSize);

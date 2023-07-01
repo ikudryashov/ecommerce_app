@@ -8,7 +8,7 @@ public class Product
 	public Guid Id { get; init; }
 	
 	[Required, MaxLength(36)]
-	public Guid CategoryId { get; set; }
+	public Guid CategoryId { get; init; }
 	
 	[Required, MaxLength(30)]
 	public string Name { get; init; } = null!;
@@ -20,5 +20,9 @@ public class Product
 	public decimal Price { get; set; }
 	
 	[Required, MaxLength(20)]
-	public string Color { get; set; } = null!;
+	public string Color { get; init; } = null!;
+	
+	[Required]
+	[Range(0, int.MaxValue)]
+	public int Quantity { get; set; }
 }
