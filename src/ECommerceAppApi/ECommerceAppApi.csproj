@@ -20,4 +20,20 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Compile Remove="Serilog\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Remove="Serilog\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Remove="Serilog\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="Serilog\**" />
+    </ItemGroup>
+
 </Project>
